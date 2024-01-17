@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+import "ips/shared/bff/v1/bff.proto";
+
+package ips.bff.v1;
+
+
+service BFFService {
+    //Get
+    rpc HealthCheck(HealthCheckRequest) returns (HealthCheckResponse);
+}
+
+message HealthCheckRequest {
+    string test_message = 1;
+}
+
+message HealthCheckResponse {
+    string response = 1;
+    ips.shared.bff.v1.HealthStatus status = 2;
+}

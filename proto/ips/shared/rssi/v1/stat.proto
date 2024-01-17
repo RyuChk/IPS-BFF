@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package ips.shared.rssi.v1;
+
+enum StatCollectionStage {
+    STAT_COLLECTION_STAGE_UNSPECIFIED = 0;
+    STAT_COLLECTION_STAGE_SINGLE = 1;
+    STAT_COLLECTION_STAGE_MULTIPLE =2;
+}

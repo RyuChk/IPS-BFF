@@ -1,0 +1,9 @@
+.env*
+*tmp
+*etc
+bin
+.DS_Store
+.bin
+.vscode
+.idea
+!.env.example
