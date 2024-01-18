@@ -2,11 +2,12 @@ package rssiclient
 
 import (
 	"context"
+	"crypto/tls"
 
 	"github.com/ZecretBone/ips-bff/internal/config"
 	v1 "github.com/ZecretBone/ips-bff/internal/gen/proto/ips/rssi/v1"
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials/insecure"
+	"google.golang.org/grpc/credentials"
 )
 
 //go:generate mockgen -source=service.go -destination=mock_rssiclient/mock_service.go -package=mock_rssiclient
@@ -19,7 +20,9 @@ type RSSIGRPCClientService struct {
 }
 
 func ProvideRSSIService(config config.GRPCConfig) Service {
-	conn, err := grpc.Dial(config.RSSIGRPCHost, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	// Skip verify certificate as the certificate is self-signed
+	creds := credentials.NewTLS(&tls.Config{InsecureSkipVerify: true})
+	conn, err := grpc.Dial(config.RSSIGRPCHost, grpc.WithTransportCredentials(creds))
 	if err != nil {
 		panic(err)
 	}
