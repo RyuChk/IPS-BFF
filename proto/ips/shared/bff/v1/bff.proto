@@ -1,9 +1,0 @@
-syntax = "proto3";
-
-package ips.shared.bff.v1;
-
-enum HealthStatus {
-    HEALTH_STATUS_UNSPECIFIED = 0;
-    HEALTH_STATUS_OK = 1;
-    HEALTH_STATUS_ERROR = 2;
-}

@@ -2,11 +2,14 @@ package rssiclient
 
 import (
 	"context"
+	"crypto/tls"
 	"fmt"
+	"os"
 
 	"github.com/ZecretBone/ips-bff/internal/config"
 	v1 "github.com/ZecretBone/ips-bff/internal/gen/proto/ips/rssi/v1"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/credentials/insecure"
 )
 
@@ -21,9 +24,20 @@ type RSSIGRPCClientService struct {
 }
 
 func ProvideRSSIService(config config.GRPCConfig) Service {
-	conn, err := grpc.Dial(config.RSSIGRPCHost, grpc.WithTransportCredentials(insecure.NewCredentials()))
-	if err != nil {
-		panic(err)
+	var conn *grpc.ClientConn
+	if currentEnvironment, ok := os.LookupEnv("ENV"); ok && currentEnvironment == "beta" {
+		c, err := grpc.Dial(config.RSSIGRPCHost, grpc.WithTransportCredentials(insecure.NewCredentials()))
+		if err != nil {
+			panic(err)
+		}
+		conn = c
+	} else {
+		creds := credentials.NewTLS(&tls.Config{InsecureSkipVerify: true})
+		c, err := grpc.Dial(config.RSSIGRPCHost, grpc.WithTransportCredentials(creds))
+		if err != nil {
+			panic(err)
+		}
+		conn = c
 	}
 
 	client := v1.NewCoordinateCollectionServiceClient(conn)
