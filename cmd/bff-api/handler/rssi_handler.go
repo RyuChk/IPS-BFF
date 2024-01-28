@@ -71,6 +71,7 @@ func (rs *rssiHandler) CollectData(ctx *gin.Context) {
 		//err
 		ctx.JSON(http.StatusBadRequest, err)
 	}
+
 	deviceID := ctx.GetHeader("X-Device-ID")
 	model := ctx.GetHeader("X-Device-Model")
 
@@ -78,6 +79,7 @@ func (rs *rssiHandler) CollectData(ctx *gin.Context) {
 
 	if _, err := rs.rssiStatClient.CollectData(ctx, data); err != nil {
 		ctx.JSON(http.StatusBadRequest, err.Error())
+		return
 	}
 
 	ctx.JSON(http.StatusOK, "success")
