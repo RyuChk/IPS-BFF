@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/ZecretBone/ips-bff/cmd/bff-api/handler"
+	oidcmiddleware "github.com/ZecretBone/ips-bff/utils/oidcMiddleware"
 	ginzerolog "github.com/easonlin404/gin-zerolog"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -23,8 +24,13 @@ func RegisterRouter(router *gin.Engine, handlers handler.Handlers) {
 		// },
 		MaxAge: 12 * time.Hour,
 	}))
+
+	oidcConfig := oidcmiddleware.LoadConfig()
 	rssiV1 := router.Group("/api/v1/rssi")
 	{
+		//Apply oidc middleware
+		rssiV1.Use(oidcmiddleware.New(oidcConfig))
+
 		rssiV1.POST("/collectdata", handlers.RSSI.CollectData)
 		rssiV1.GET("/getcoordinate", handlers.RSSI.GetCoordinate)
 		rssiV1.POST("/registerap", handlers.RSSI.RegisterAp)
