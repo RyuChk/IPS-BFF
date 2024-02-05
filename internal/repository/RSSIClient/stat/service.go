@@ -22,7 +22,6 @@ type RSSIGRPCClientService struct {
 }
 
 func ProvideRSSIService(config config.GRPCConfig) Service {
-	// Skip verify certificate as the certificate is self-signed
 	var conn *grpc.ClientConn
 	if currentEnvironment, ok := os.LookupEnv("ENV"); ok && currentEnvironment == "beta" {
 		c, err := grpc.Dial(config.RSSIGRPCHost, grpc.WithTransportCredentials(insecure.NewCredentials()))

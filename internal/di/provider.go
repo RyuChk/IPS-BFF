@@ -4,6 +4,7 @@ import (
 	wireminio "git.cie.com/ips/wire-provider/minio"
 	wiremongo "git.cie.com/ips/wire-provider/mongodb"
 	"github.com/ZecretBone/ips-bff/internal/config"
+	mapgrpcclient "github.com/ZecretBone/ips-bff/internal/repository/MapGRPCClient"
 	rssiclient "github.com/ZecretBone/ips-bff/internal/repository/RSSIClient/rssi"
 	rssistatclient "github.com/ZecretBone/ips-bff/internal/repository/RSSIClient/stat"
 	"github.com/ZecretBone/ips-bff/internal/repository/cache"
@@ -22,6 +23,7 @@ var DatabaseSet = wire.NewSet(
 var ProviderSet = wire.NewSet(
 	rssi.ProvideRSSIService,
 	rssiclient.ProvideRSSIService,
+	mapgrpcclient.ProvideMapService,
 	rssistatclient.ProvideRSSIService,
 )
 
