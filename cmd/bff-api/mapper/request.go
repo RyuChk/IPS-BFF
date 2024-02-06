@@ -1,4 +1,4 @@
-package mapping
+package mapper
 
 import (
 	"github.com/ZecretBone/ips-bff/apps/constants"
