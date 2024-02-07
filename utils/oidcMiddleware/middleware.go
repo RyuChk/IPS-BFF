@@ -3,6 +3,7 @@ package oidcmiddleware
 import (
 	"crypto/tls"
 	"encoding/json"
+	"errors"
 	"io"
 	"net/http"
 	"strings"
@@ -18,17 +19,6 @@ type middleware struct {
 	userInfoEndpoint      string
 	tokenEndpoint         string
 	authorizationEndpoint string
-}
-
-type UserInfo struct {
-	Email             string   `json:"email"`
-	EmailVerified     bool     `json:"email_verified"`
-	Name              string   `json:"name"`
-	GivenName         string   `json:"given_name"`
-	PreferredUsername string   `json:"preferred_username"`
-	Nickname          string   `json:"nickname"`
-	Groups            []string `json:"groups"`
-	Sub               string   `json:"sub"`
 }
 
 func New(config *Config) gin.HandlerFunc {
@@ -50,42 +40,45 @@ func newOIDCMiddleware(config *Config) *middleware {
 }
 
 func (m *middleware) applyOIDCMiddleWare(c *gin.Context) {
-	m.getAccessKey(c)
-	userInfo := m.getUserInfo(c)
-
+	if err := m.getAccessKey(c); err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
+		c.Abort()
+		return
+	}
+	userInfo, err := m.getUserInfo(c)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.Abort()
+		return
+	}
 	c.Set("UserInfo", userInfo)
 	c.Next()
 }
 
-func (m *middleware) getAccessKey(c *gin.Context) {
+func (m *middleware) getAccessKey(c *gin.Context) error {
 	authHeader := c.GetHeader("Authorization")
 
 	if authHeader == "" {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Authorization header is missing"})
-		c.Abort()
-		return
+		return errors.New("authorization header is missing")
 	}
 
 	headerParts := strings.Split(authHeader, " ")
 	if len(headerParts) != 2 || headerParts[0] != "Bearer" {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid or missing Bearer token"})
-		c.Abort()
-		return
+		return errors.New("invalid or missing Bearer token")
 	}
 
 	m.accessToken = headerParts[1]
+	return nil
 }
 
-func (m *middleware) getUserInfo(c *gin.Context) UserInfo {
+func (m *middleware) getUserInfo(c *gin.Context) (UserInfo, error) {
 	if m.accessToken == "" {
-		c.JSON(http.StatusBadRequest, "no access token, access token is required in header")
-		c.Abort()
+		return UserInfo{}, errors.New("no access token, access token is required in header")
 	}
 
 	req, err := http.NewRequest("GET", m.userInfoEndpoint, nil)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, "error creating request for OIDC validation")
-		c.Abort()
+		return UserInfo{}, errors.New("error creating request for OIDC validation")
 	}
 
 	req.Header.Add("Authorization", "Bearer "+m.accessToken)
@@ -100,24 +93,26 @@ func (m *middleware) getUserInfo(c *gin.Context) UserInfo {
 	// Send the request
 	resp, err := client.Do(req)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, "error sending request to oidc")
-		c.Abort()
+		return UserInfo{}, errors.New("error sending request to oidc")
 	}
+
+	if resp.StatusCode != http.StatusOK {
+		return UserInfo{}, errors.New("unauthorized")
+	}
+
 	defer resp.Body.Close()
 
 	// Read the response body
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, "error reading body from OIDC")
-		c.Abort()
+		return UserInfo{}, errors.New("error reading body from OIDC")
 	}
 
 	var result UserInfo
 	err = json.Unmarshal(body, &result)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, "binding responses")
-		c.Abort()
+		return UserInfo{}, errors.New("binding responses")
 	}
 
-	return result
+	return result, nil
 }

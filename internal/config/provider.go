@@ -26,6 +26,10 @@ func ProvideRSSIConfig() RSSIServiceConfig {
 	return provideConfig(RSSIServiceConfig{})
 }
 
+func ProvideRealtimeServiceConfig() RealtimeServiceConfig {
+	return provideConfig(RealtimeServiceConfig{})
+}
+
 func provideConfig[T any](cfg T) T {
 	envconfig.MustProcess("", &cfg)
 	return cfg

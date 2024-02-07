@@ -8,28 +8,25 @@ package di
 
 import (
 	"git.cie.com/ips/wire-provider/gin/provider"
-	"github.com/ZecretBone/ips-bff/cmd/bff-api/handler"
-	"github.com/ZecretBone/ips-bff/cmd/bff-api/server"
+	"github.com/ZecretBone/ips-bff/cmd/realtime-api/handler"
+	"github.com/ZecretBone/ips-bff/cmd/realtime-api/server"
 	"github.com/ZecretBone/ips-bff/internal/config"
 	"github.com/ZecretBone/ips-bff/internal/di"
-	"github.com/ZecretBone/ips-bff/internal/repository/grpc/mapclient"
-	"github.com/ZecretBone/ips-bff/internal/repository/grpc/rssiclient"
-	"github.com/ZecretBone/ips-bff/internal/repository/grpc/statclient"
+	"github.com/ZecretBone/ips-bff/internal/repository/grpc/presenceclient"
+	"github.com/ZecretBone/ips-bff/internal/services/realtime"
 	"github.com/google/wire"
 )
 
 // Injectors from di.go:
 
 func InitializeContainer() (*Container, func(), error) {
+	realtimeServiceConfig := config.ProvideRealtimeServiceConfig()
 	grpcConfig := config.ProvideGRPCServiceConfig()
-	service := statclient.ProvideStatService(grpcConfig)
-	rssiclientService := rssiclient.ProvideRSSIService(grpcConfig)
-	rssiHandler := handler.ProvideRSSIHandler(service, rssiclientService)
-	mapgrpcclientService := mapgrpcclient.ProvideMapService(grpcConfig)
-	mapHandler := handler.ProvideMapHandler(mapgrpcclientService)
+	service := presenceclient.ProvidePresenceServiceClient(grpcConfig)
+	realtimeService := realtime.ProvideRealtimeService(realtimeServiceConfig, service)
+	realtimeHandler := handler.ProvideRealtimeHandler(realtimeService)
 	handlers := handler.Handlers{
-		RSSI: rssiHandler,
-		Map:  mapHandler,
+		Realtime: realtimeHandler,
 	}
 	routerCustomizer := server.ProvideGinRouterCustomizer(handlers)
 	ginServer, cleanup, err := provider.ProvideGinServer(routerCustomizer)
@@ -37,7 +34,8 @@ func InitializeContainer() (*Container, func(), error) {
 		return nil, nil, err
 	}
 	container := &Container{
-		server: ginServer,
+		server:          ginServer,
+		RealtimeService: realtimeService,
 	}
 	return container, func() {
 		cleanup()

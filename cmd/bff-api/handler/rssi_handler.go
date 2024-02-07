@@ -8,8 +8,8 @@ import (
 	"github.com/ZecretBone/ips-bff/cmd/bff-api/mapper"
 	v1 "github.com/ZecretBone/ips-bff/internal/gen/proto/ips/rssi/v1"
 	rssiv1 "github.com/ZecretBone/ips-bff/internal/gen/proto/ips/shared/rssi/v1"
-	rssiclient "github.com/ZecretBone/ips-bff/internal/repository/RSSIClient/rssi"
-	rssistatclient "github.com/ZecretBone/ips-bff/internal/repository/RSSIClient/stat"
+	rssiclient "github.com/ZecretBone/ips-bff/internal/repository/grpc/rssiclient"
+	"github.com/ZecretBone/ips-bff/internal/repository/grpc/statclient"
 	"github.com/gin-gonic/gin"
 )
 
@@ -20,11 +20,11 @@ type RSSIHandler interface {
 }
 
 type rssiHandler struct {
-	rssiStatClient rssistatclient.Service
+	rssiStatClient statclient.Service
 	rssiClient     rssiclient.Service
 }
 
-func ProvideRSSIHandler(rssiStatClient rssistatclient.Service, rssiClient rssiclient.Service) RSSIHandler {
+func ProvideRSSIHandler(rssiStatClient statclient.Service, rssiClient rssiclient.Service) RSSIHandler {
 	return &rssiHandler{
 		rssiStatClient: rssiStatClient,
 		rssiClient:     rssiClient,

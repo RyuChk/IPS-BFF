@@ -4,19 +4,21 @@
 package di
 
 import (
-	"git.cie.com/ips/wire-provider/grpc/provider"
+	"git.cie.com/ips/wire-provider/gin/provider"
 	internalDi "github.com/ZecretBone/ips-bff/internal/di"
 	"github.com/google/wire"
 )
 
 var BaseBindingSet = wire.NewSet(
+	ProviderSet,
+	CustomizerSet,
+
 	internalDi.DatabaseSet,
 	internalDi.ConfigSet,
 	internalDi.ProviderSet,
 )
 
 var MainBindingSet = wire.NewSet(
-	ProviderSet,
 	BaseBindingSet,
 	provider.WireSet,
 	wire.Struct(new(Container), "*"),

@@ -40,7 +40,7 @@ test:
 	@printf \\e[1m"Run test"\\e[0m\\n
 	@ENV=unittest $(GO) test $(GOTESTFLAGS) ./...
 
-build: .bin/bff-api
+build: .bin/bff-api .bin/realtime-api
 
 go.sum:
 	@printf \\e[1m"go mod tidy"\\e[0m\\n
@@ -50,3 +50,7 @@ go.sum:
 .bin/bff-api: go.mod go.sum $(GO_FILES)
 	@printf \\e[1m"Build .bin/bff-api"\\e[0m\\n
 	@cd cmd/bff-api && $(GO) build -o ../../.bin/bff-api .
+
+.bin/realtime-api: go.mod go.sum $(GO_FILES)
+	@printf \\e[1m"Build .bin/realtime-api"\\e[0m\\n
+	@cd cmd/realtime-api && $(GO) build -o ../../.bin/realtime-api .

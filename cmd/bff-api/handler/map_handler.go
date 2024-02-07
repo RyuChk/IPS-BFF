@@ -7,7 +7,7 @@ import (
 	"github.com/ZecretBone/ips-bff/cmd/bff-api/mapper"
 	mapv1 "github.com/ZecretBone/ips-bff/internal/gen/proto/ips/map/v1"
 	userv1 "github.com/ZecretBone/ips-bff/internal/gen/proto/ips/shared/user/v1"
-	mapgrpcclient "github.com/ZecretBone/ips-bff/internal/repository/MapGRPCClient"
+	mapgrpcclient "github.com/ZecretBone/ips-bff/internal/repository/grpc/mapclient"
 	oidcmiddleware "github.com/ZecretBone/ips-bff/utils/oidcMiddleware"
 	"github.com/gin-gonic/gin"
 )

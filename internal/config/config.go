@@ -20,12 +20,17 @@ type CacheConfig struct {
 }
 
 type GRPCConfig struct {
-	RSSIGRPCHost string `envconfig:"RSSI_GRPC_HOST" required:"true"`
-	MapGRPCHost  string `envconfig:"MAP_GRPC_HOST" required:"true"`
+	RSSIGRPCHost     string `envconfig:"RSSI_GRPC_HOST" required:"true"`
+	MapGRPCHost      string `envconfig:"MAP_GRPC_HOST" required:"true"`
+	PresenceGRPCHost string `envconfig:"PRESENCE_GRPC_HOST" required:"true"`
 }
 
 type MinioConfig struct {
 	Bucket string `envconfig:"MINIO_BUCKET" default:"document-service"`
+}
+
+type RealtimeServiceConfig struct {
+	OnlineUserPresenceDelay time.Duration `envconfig:"REALTIME_SERVICE_USER_PRESENCE_DELAY" default:"3s"`
 }
 
 type RSSIServiceConfig struct {

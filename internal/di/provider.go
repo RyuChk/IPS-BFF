@@ -4,12 +4,14 @@ import (
 	wireminio "git.cie.com/ips/wire-provider/minio"
 	wiremongo "git.cie.com/ips/wire-provider/mongodb"
 	"github.com/ZecretBone/ips-bff/internal/config"
-	mapgrpcclient "github.com/ZecretBone/ips-bff/internal/repository/MapGRPCClient"
-	rssiclient "github.com/ZecretBone/ips-bff/internal/repository/RSSIClient/rssi"
-	rssistatclient "github.com/ZecretBone/ips-bff/internal/repository/RSSIClient/stat"
 	"github.com/ZecretBone/ips-bff/internal/repository/cache"
+	mapgrpcclient "github.com/ZecretBone/ips-bff/internal/repository/grpc/mapclient"
+	"github.com/ZecretBone/ips-bff/internal/repository/grpc/presenceclient"
+	rssiclient "github.com/ZecretBone/ips-bff/internal/repository/grpc/rssiclient"
+	"github.com/ZecretBone/ips-bff/internal/repository/grpc/statclient"
 	"github.com/ZecretBone/ips-bff/internal/repository/minio"
 	"github.com/ZecretBone/ips-bff/internal/repository/mongodb"
+	"github.com/ZecretBone/ips-bff/internal/services/realtime"
 	"github.com/ZecretBone/ips-bff/internal/services/rssi"
 	"github.com/google/wire"
 )
@@ -22,9 +24,11 @@ var DatabaseSet = wire.NewSet(
 
 var ProviderSet = wire.NewSet(
 	rssi.ProvideRSSIService,
+	statclient.ProvideStatService,
 	rssiclient.ProvideRSSIService,
+	presenceclient.ProvidePresenceServiceClient,
 	mapgrpcclient.ProvideMapService,
-	rssistatclient.ProvideRSSIService,
+	realtime.ProvideRealtimeService,
 )
 
 var ConfigSet = wire.NewSet(
@@ -33,6 +37,7 @@ var ConfigSet = wire.NewSet(
 	config.ProvideCacheConfig,
 	config.ProvideRSSIConfig,
 	config.ProvideGRPCServiceConfig,
+	config.ProvideRealtimeServiceConfig,
 )
 
 type Locator struct {

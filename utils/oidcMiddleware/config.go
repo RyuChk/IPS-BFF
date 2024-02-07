@@ -14,7 +14,7 @@ import (
 
 type Config struct {
 	ConfigURL    string `envconfig:"OIDC_MIDDLEWARE_CONFIG_URL"`
-	ClientID     string `envconfig:"OIDC_MIDDLEWARRE_CLIENT_ID" required:"true"`
+	ClientID     string `envconfig:"OIDC_MIDDLEWARE_CLIENT_ID" required:"true"`
 	ClientSecret string `envconfig:"OIDC_MIDDLEWARE_CLIENT_SECRET" required:"true"`
 
 	//Can be loaded from config URL

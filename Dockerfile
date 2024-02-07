@@ -13,6 +13,7 @@ RUN make
 FROM debian:bookworm
 USER 0
 COPY --from=builder /build/.bin/bff-api /opt/bff-api
+COPY --from=builder /build/.bin/realtime-api /opt/realtime-api
 USER 1000
 WORKDIR /
 CMD ["/opt/."]
