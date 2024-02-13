@@ -1,4 +1,4 @@
-package rssiclient
+package datacollectionclient
 
 import (
 	"context"
@@ -12,16 +12,16 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 )
 
-//go:generate mockgen -source=service.go -destination=mock_rssiclient/mock_service.go -package=mock_rssiclient
+//go:generate mockgen -source=service.go -destination=mock_datacollectionclient/mock_service.go -package=mock_datacollectionclient
 type Service interface {
 	CollectData(ctx context.Context, body *v1.CollectDataRequest) (*v1.CollectDataResponse, error)
 }
 
-type RSSIGRPCClientService struct {
+type DataCollectionGRPCClient struct {
 	client v1.StatCollectionServiceClient
 }
 
-func ProvideRSSIService(config config.GRPCConfig) Service {
+func ProvideDataCollectionGRPCClient(config config.GRPCConfig) Service {
 	var conn *grpc.ClientConn
 	if currentEnvironment, ok := os.LookupEnv("ENV"); ok && currentEnvironment == "beta" {
 		c, err := grpc.Dial(config.DataCollectionGRPCHost, grpc.WithTransportCredentials(insecure.NewCredentials()))
@@ -39,12 +39,12 @@ func ProvideRSSIService(config config.GRPCConfig) Service {
 	}
 
 	client := v1.NewStatCollectionServiceClient(conn)
-	return &RSSIGRPCClientService{
+	return &DataCollectionGRPCClient{
 		client: client,
 	}
 }
 
-func (s *RSSIGRPCClientService) CollectData(ctx context.Context, body *v1.CollectDataRequest) (*v1.CollectDataResponse, error) {
+func (s *DataCollectionGRPCClient) CollectData(ctx context.Context, body *v1.CollectDataRequest) (*v1.CollectDataResponse, error) {
 	res, err := s.client.CollectData(ctx, body)
 	if err != nil {
 		return nil, err

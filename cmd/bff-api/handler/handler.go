@@ -1,6 +1,6 @@
 package handler
 
 type Handlers struct {
-	StatCollection StatCollectionHandler
+	StatCollection DataCollectionHandler
 	Map            MapHandler
 }

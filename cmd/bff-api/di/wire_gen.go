@@ -13,6 +13,7 @@ import (
 	"github.com/ZecretBone/ips-bff/internal/config"
 	"github.com/ZecretBone/ips-bff/internal/di"
 	"github.com/ZecretBone/ips-bff/internal/repository/MapGRPCClient"
+	"github.com/ZecretBone/ips-bff/internal/repository/RSSIClient/DataCollectionClient"
 	"github.com/google/wire"
 )
 
@@ -20,10 +21,13 @@ import (
 
 func InitializeContainer() (*Container, func(), error) {
 	grpcConfig := config.ProvideGRPCServiceConfig()
-	service := mapgrpcclient.ProvideMapService(grpcConfig)
-	mapHandler := handler.ProvideMapHandler(service)
+	service := datacollectionclient.ProvideDataCollectionGRPCClient(grpcConfig)
+	dataCollectionHandler := handler.ProvideDataCollectionHandler(service)
+	mapgrpcclientService := mapgrpcclient.ProvideMapService(grpcConfig)
+	mapHandler := handler.ProvideMapHandler(mapgrpcclientService)
 	handlers := handler.Handlers{
-		Map: mapHandler,
+		StatCollection: dataCollectionHandler,
+		Map:            mapHandler,
 	}
 	routerCustomizer := server.ProvideGinRouterCustomizer(handlers)
 	ginServer, cleanup, err := provider.ProvideGinServer(routerCustomizer)
