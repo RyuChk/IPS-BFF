@@ -24,14 +24,14 @@ type RSSIGRPCClientService struct {
 func ProvideRSSIService(config config.GRPCConfig) Service {
 	var conn *grpc.ClientConn
 	if currentEnvironment, ok := os.LookupEnv("ENV"); ok && currentEnvironment == "beta" {
-		c, err := grpc.Dial(config.RSSIGRPCHost, grpc.WithTransportCredentials(insecure.NewCredentials()))
+		c, err := grpc.Dial(config.DataCollectionGRPCHost, grpc.WithTransportCredentials(insecure.NewCredentials()))
 		if err != nil {
 			panic(err)
 		}
 		conn = c
 	} else {
 		creds := credentials.NewTLS(&tls.Config{InsecureSkipVerify: true})
-		c, err := grpc.Dial(config.RSSIGRPCHost, grpc.WithTransportCredentials(creds))
+		c, err := grpc.Dial(config.DataCollectionGRPCHost, grpc.WithTransportCredentials(creds))
 		if err != nil {
 			panic(err)
 		}

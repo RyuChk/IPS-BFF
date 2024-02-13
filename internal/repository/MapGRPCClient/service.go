@@ -24,7 +24,7 @@ type MapGRPCClientService struct {
 func ProvideMapService(config config.GRPCConfig) Service {
 	var conn *grpc.ClientConn
 	if currentEnvironment, ok := os.LookupEnv("ENV"); ok && currentEnvironment == "beta" {
-		c, err := grpc.Dial(config.RSSIGRPCHost, grpc.WithTransportCredentials(insecure.NewCredentials()))
+		c, err := grpc.Dial(config.DataCollectionGRPCHost, grpc.WithTransportCredentials(insecure.NewCredentials()))
 		if err != nil {
 			panic(err)
 		}

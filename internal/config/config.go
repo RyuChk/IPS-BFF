@@ -20,8 +20,8 @@ type CacheConfig struct {
 }
 
 type GRPCConfig struct {
-	RSSIGRPCHost string `envconfig:"RSSI_GRPC_HOST" required:"true"`
-	MapGRPCHost  string `envconfig:"MAP_GRPC_HOST" required:"true"`
+	DataCollectionGRPCHost string `envconfig:"DATA_COLLECTION_GRPC_HOST" required:"true"`
+	MapGRPCHost            string `envconfig:"MAP_GRPC_HOST" required:"true"`
 }
 
 type MinioConfig struct {
