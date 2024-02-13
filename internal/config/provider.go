@@ -22,10 +22,6 @@ func ProvideCacheConfig() CacheConfig {
 	return provideConfig(CacheConfig{})
 }
 
-func ProvideRSSIConfig() RSSIServiceConfig {
-	return provideConfig(RSSIServiceConfig{})
-}
-
 func provideConfig[T any](cfg T) T {
 	envconfig.MustProcess("", &cfg)
 	return cfg

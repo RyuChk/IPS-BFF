@@ -12,7 +12,6 @@ var CustomizerSet = wire.NewSet(
 )
 
 var ProviderSet = wire.NewSet(
-	handler.ProvideRSSIHandler,
 	handler.ProvideMapHandler,
 	wire.Struct(new(handler.Handlers), "*"),
 )
@@ -20,5 +19,5 @@ var ProviderSet = wire.NewSet(
 type Locator struct {
 	Handlers            *handler.Handlers
 	GinServerCustomizer provider.RouterCustomizer
-	RSSIHandler         handler.RSSIHandler
+	RSSIHandler         handler.StatCollectionHandler
 }

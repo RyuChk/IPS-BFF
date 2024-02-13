@@ -28,9 +28,6 @@ type MinioConfig struct {
 	Bucket string `envconfig:"MINIO_BUCKET" default:"document-service"`
 }
 
-type RSSIServiceConfig struct {
-}
-
 func LoadConfig() {
 	if currentEnvironment, ok := os.LookupEnv("ENV"); ok {
 		_, b, _, _ := runtime.Caller(0)

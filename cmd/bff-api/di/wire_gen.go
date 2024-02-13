@@ -13,8 +13,6 @@ import (
 	"github.com/ZecretBone/ips-bff/internal/config"
 	"github.com/ZecretBone/ips-bff/internal/di"
 	"github.com/ZecretBone/ips-bff/internal/repository/MapGRPCClient"
-	rssiclient2 "github.com/ZecretBone/ips-bff/internal/repository/RSSIClient/rssi"
-	"github.com/ZecretBone/ips-bff/internal/repository/RSSIClient/stat"
 	"github.com/google/wire"
 )
 
@@ -22,14 +20,10 @@ import (
 
 func InitializeContainer() (*Container, func(), error) {
 	grpcConfig := config.ProvideGRPCServiceConfig()
-	service := rssiclient.ProvideRSSIService(grpcConfig)
-	rssiclientService := rssiclient2.ProvideRSSIService(grpcConfig)
-	rssiHandler := handler.ProvideRSSIHandler(service, rssiclientService)
-	mapgrpcclientService := mapgrpcclient.ProvideMapService(grpcConfig)
-	mapHandler := handler.ProvideMapHandler(mapgrpcclientService)
+	service := mapgrpcclient.ProvideMapService(grpcConfig)
+	mapHandler := handler.ProvideMapHandler(service)
 	handlers := handler.Handlers{
-		RSSI: rssiHandler,
-		Map:  mapHandler,
+		Map: mapHandler,
 	}
 	routerCustomizer := server.ProvideGinRouterCustomizer(handlers)
 	ginServer, cleanup, err := provider.ProvideGinServer(routerCustomizer)
