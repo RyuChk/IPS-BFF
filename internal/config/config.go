@@ -22,6 +22,7 @@ type CacheConfig struct {
 type GRPCConfig struct {
 	DataCollectionGRPCHost string `envconfig:"DATA_COLLECTION_GRPC_HOST" required:"true"`
 	MapGRPCHost            string `envconfig:"MAP_GRPC_HOST" required:"true"`
+	UserTrackingGRPCHost   string `envconfig:"USER_TRACKING_GRPC_HOST" required:"true"`
 }
 
 type MinioConfig struct {

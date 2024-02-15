@@ -12,12 +12,13 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 )
 
+//go:generate mockgen -source=service.go -destination=mock_mapclient/mock_service.go -package=mock_mapclient
 type Service interface {
 	GetFloorList(ctx context.Context, body *mapv1.GetFloorListRequest) (*mapv1.GetFloorListResponse, error)
 	GetFloorMapURL(ctx context.Context, body *mapv1.GetMapURLRequest) (*mapv1.GetMapURLResponse, error)
 }
 
-type MapGRPCClientService struct {
+type mapGRPCClientService struct {
 	client mapv1.MapServiceClient
 }
 
@@ -39,12 +40,12 @@ func ProvideMapService(config config.GRPCConfig) Service {
 	}
 
 	client := mapv1.NewMapServiceClient(conn)
-	return &MapGRPCClientService{
+	return &mapGRPCClientService{
 		client: client,
 	}
 }
 
-func (s *MapGRPCClientService) GetFloorList(ctx context.Context, body *mapv1.GetFloorListRequest) (*mapv1.GetFloorListResponse, error) {
+func (s *mapGRPCClientService) GetFloorList(ctx context.Context, body *mapv1.GetFloorListRequest) (*mapv1.GetFloorListResponse, error) {
 	res, err := s.client.GetFloorList(ctx, body)
 	if err != nil {
 		return nil, err
@@ -53,7 +54,7 @@ func (s *MapGRPCClientService) GetFloorList(ctx context.Context, body *mapv1.Get
 	return res, nil
 }
 
-func (s *MapGRPCClientService) GetFloorMapURL(ctx context.Context, body *mapv1.GetMapURLRequest) (*mapv1.GetMapURLResponse, error) {
+func (s *mapGRPCClientService) GetFloorMapURL(ctx context.Context, body *mapv1.GetMapURLRequest) (*mapv1.GetMapURLResponse, error) {
 	res, err := s.client.GetMapURL(ctx, body)
 	if err != nil {
 		return nil, err

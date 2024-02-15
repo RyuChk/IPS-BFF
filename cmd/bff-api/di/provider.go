@@ -13,6 +13,7 @@ var CustomizerSet = wire.NewSet(
 
 var ProviderSet = wire.NewSet(
 	handler.ProvideDataCollectionHandler,
+	handler.ProvideUserTrackingHandler,
 	handler.ProvideMapHandler,
 	wire.Struct(new(handler.Handlers), "*"),
 )

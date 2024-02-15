@@ -1,4 +1,4 @@
-package mapservice
+package models
 
 import "time"
 

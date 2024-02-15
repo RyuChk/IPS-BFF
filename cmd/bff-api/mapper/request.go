@@ -1,10 +1,10 @@
 package mapper
 
 import (
-	"github.com/ZecretBone/ips-bff/apps/constants"
-	"github.com/ZecretBone/ips-bff/apps/rssi/models/request"
+	"github.com/ZecretBone/ips-bff/internal/constants"
 	v1 "github.com/ZecretBone/ips-bff/internal/gen/proto/ips/rssi/v1"
 	rssiv1 "github.com/ZecretBone/ips-bff/internal/gen/proto/ips/shared/rssi/v1"
+	"github.com/ZecretBone/ips-bff/internal/models/request"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 

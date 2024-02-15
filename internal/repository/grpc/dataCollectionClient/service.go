@@ -17,7 +17,7 @@ type Service interface {
 	CollectData(ctx context.Context, body *v1.CollectDataRequest) (*v1.CollectDataResponse, error)
 }
 
-type DataCollectionGRPCClient struct {
+type dataCollectionGRPCClient struct {
 	client v1.StatCollectionServiceClient
 }
 
@@ -39,12 +39,12 @@ func ProvideDataCollectionGRPCClient(config config.GRPCConfig) Service {
 	}
 
 	client := v1.NewStatCollectionServiceClient(conn)
-	return &DataCollectionGRPCClient{
+	return &dataCollectionGRPCClient{
 		client: client,
 	}
 }
 
-func (s *DataCollectionGRPCClient) CollectData(ctx context.Context, body *v1.CollectDataRequest) (*v1.CollectDataResponse, error) {
+func (s *dataCollectionGRPCClient) CollectData(ctx context.Context, body *v1.CollectDataRequest) (*v1.CollectDataResponse, error) {
 	res, err := s.client.CollectData(ctx, body)
 	if err != nil {
 		return nil, err
