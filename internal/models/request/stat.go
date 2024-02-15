@@ -3,8 +3,8 @@ package request
 import (
 	"time"
 
-	"github.com/ZecretBone/ips-bff/apps/constants"
-	"github.com/ZecretBone/ips-bff/apps/rssi/models"
+	"github.com/ZecretBone/ips-bff/internal/constants"
+	"github.com/ZecretBone/ips-bff/internal/models"
 )
 
 type StatCollectionRequest struct {

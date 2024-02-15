@@ -27,11 +27,23 @@ func RegisterRouter(router *gin.Engine, handlers handler.Handlers) {
 
 	rssiV1 := router.Group("/api/v1/rssi")
 	{
-
 		rssiV1.POST("/collectdata", handlers.StatCollection.CollectData)
 	}
 
 	oidcConfig := oidcmiddleware.LoadConfig()
+
+	userManagerV1 := router.Group("/api/v1/user")
+	{
+		userManagerV1.Use(oidcmiddleware.New(oidcConfig))
+
+		userManagerV1.GET("/ws")
+
+		admin := userManagerV1.Group("/admin")
+		{
+			admin.GET("/online/:building/:floor", handlers.UserTracking.GetOnlineUser)
+		}
+	}
+
 	mapv1 := router.Group("/api/v1/map")
 	{
 		mapv1.Use(oidcmiddleware.New(oidcConfig))

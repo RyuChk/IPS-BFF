@@ -1,19 +1,19 @@
 package mapper
 
 import (
-	mapservice "github.com/ZecretBone/ips-bff/apps/map"
-	mapResponse "github.com/ZecretBone/ips-bff/apps/map/models/response"
 	mapv1 "github.com/ZecretBone/ips-bff/internal/gen/proto/ips/map/v1"
+	"github.com/ZecretBone/ips-bff/internal/models"
+	"github.com/ZecretBone/ips-bff/internal/models/response"
 )
 
-func ToGetFloorListResponse(raw *mapv1.GetFloorListResponse) mapResponse.GetMapFloorListResponse {
-	result := mapResponse.GetMapFloorListResponse{
-		Floors:  make([]mapservice.Map, len(raw.Floors)),
+func ToGetFloorListResponse(raw *mapv1.GetFloorListResponse) response.GetMapFloorListResponse {
+	result := response.GetMapFloorListResponse{
+		Floors:  make([]models.Map, len(raw.Floors)),
 		IsAdmin: false,
 	}
 
 	for i, v := range raw.Floors {
-		result.Floors[i] = mapservice.Map{
+		result.Floors[i] = models.Map{
 			Name:        v.Name,
 			Description: v.Description,
 			Building:    v.Building,
@@ -26,9 +26,9 @@ func ToGetFloorListResponse(raw *mapv1.GetFloorListResponse) mapResponse.GetMapF
 	return result
 }
 
-func ToGetMapURLResponse(raw *mapv1.GetMapURLResponse) mapResponse.GetMapURLResponse {
-	result := mapResponse.GetMapURLResponse{
-		Detail: mapservice.Map{
+func ToGetMapURLResponse(raw *mapv1.GetMapURLResponse) response.GetMapURLResponse {
+	result := response.GetMapURLResponse{
+		Detail: models.Map{
 			Name:        raw.Detail.Name,
 			Description: raw.Detail.Description,
 			Building:    raw.Detail.Building,
@@ -38,6 +38,23 @@ func ToGetMapURLResponse(raw *mapv1.GetMapURLResponse) mapResponse.GetMapURLResp
 		},
 		URL:       raw.Url,
 		UpdatedAt: raw.UpdatedAt.AsTime(),
+	}
+
+	return result
+}
+
+func MapFetchResponseToOnlineUserStruct(resp *mapv1.FetchOnlineUserResponse) []models.OnlineUser {
+	result := make([]models.OnlineUser, len(resp.OnlineUsers))
+	for i, v := range resp.OnlineUsers {
+		result[i] = models.OnlineUser{
+			DisplayName: v.DisplayName,
+			Coordinate: models.Position{
+				X: float64(v.Coordinate.X),
+				Y: float64(v.Coordinate.Y),
+				Z: float64(v.Coordinate.Z),
+			},
+			Timestamp: v.Timestamp.AsTime(),
+		}
 	}
 
 	return result

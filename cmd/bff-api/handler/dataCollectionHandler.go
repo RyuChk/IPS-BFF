@@ -3,9 +3,9 @@ package handler
 import (
 	"net/http"
 
-	"github.com/ZecretBone/ips-bff/apps/rssi/models/request"
 	"github.com/ZecretBone/ips-bff/cmd/bff-api/mapper"
-	datacollectionclient "github.com/ZecretBone/ips-bff/internal/repository/RSSIClient/DataCollectionClient"
+	"github.com/ZecretBone/ips-bff/internal/models/request"
+	datacollectionclient "github.com/ZecretBone/ips-bff/internal/repository/grpc/dataCollectionClient"
 	"github.com/gin-gonic/gin"
 )
 
