@@ -41,6 +41,7 @@ func RegisterRouter(router *gin.Engine, handlers handler.Handlers) {
 		admin := userManagerV1.Group("/admin")
 		{
 			admin.GET("/online/:building/:floor", handlers.UserTracking.GetOnlineUser)
+			admin.GET("/online/sse/:building/:floor", handlers.UserTrackingSSE.HandleNewClient)
 		}
 	}
 

@@ -1,7 +1,8 @@
 package handler
 
 type Handlers struct {
-	StatCollection DataCollectionHandler
-	UserTracking   UserTrackingHandler
-	Map            MapHandler
+	StatCollection  DataCollectionHandler
+	UserTracking    UserTrackingHandler
+	UserTrackingSSE UserTrackingSSEHandler
+	Map             MapHandler
 }
