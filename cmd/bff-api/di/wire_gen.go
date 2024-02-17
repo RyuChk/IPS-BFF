@@ -26,12 +26,14 @@ func InitializeContainer() (*Container, func(), error) {
 	dataCollectionHandler := handler.ProvideDataCollectionHandler(service)
 	usertrackingclientService := usertrackingclient.ProvideUserTrackingService(grpcConfig)
 	userTrackingHandler := handler.ProvideUserTrackingHandler(usertrackingclientService)
+	userTrackingSSEHandler := handler.ProvideUserTrackingSSEHandler(usertrackingclientService)
 	mapgrpcclientService := mapgrpcclient.ProvideMapService(grpcConfig)
 	mapHandler := handler.ProvideMapHandler(mapgrpcclientService)
 	handlers := handler.Handlers{
-		StatCollection: dataCollectionHandler,
-		UserTracking:   userTrackingHandler,
-		Map:            mapHandler,
+		StatCollection:  dataCollectionHandler,
+		UserTracking:    userTrackingHandler,
+		UserTrackingSSE: userTrackingSSEHandler,
+		Map:             mapHandler,
 	}
 	routerCustomizer := server.ProvideGinRouterCustomizer(handlers)
 	ginServer, cleanup, err := provider.ProvideGinServer(routerCustomizer)
@@ -39,7 +41,8 @@ func InitializeContainer() (*Container, func(), error) {
 		return nil, nil, err
 	}
 	container := &Container{
-		server: ginServer,
+		server:          ginServer,
+		UserTrackingSSE: userTrackingSSEHandler,
 	}
 	return container, func() {
 		cleanup()
