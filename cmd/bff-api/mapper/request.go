@@ -13,6 +13,13 @@ var (
 		constants.DataCollectionStageSingle:   rssiv1.StatCollectionStage_STAT_COLLECTION_STAGE_SINGLE,
 		constants.DataCollectionStageMultiple: rssiv1.StatCollectionStage_STAT_COLLECTION_STAGE_MULTIPLE,
 	}
+
+	ToEnumRecordingDirection = map[constants.Direction]rssiv1.RecordingDirection{
+		constants.North: rssiv1.RecordingDirection_RECORDING_DIRECTION_NORTH,
+		constants.South: rssiv1.RecordingDirection_RECORDING_DIRECTION_SOUTH,
+		constants.East:  rssiv1.RecordingDirection_RECORDING_DIRECTION_EAST,
+		constants.West:  rssiv1.RecordingDirection_RECORDING_DIRECTION_WEST,
+	}
 )
 
 func ToDataCollectionDataRequest(req request.StatCollectionRequest, device_id, model string) *v1.CollectDataRequest {
@@ -47,6 +54,7 @@ func ToDataCollectionDataRequest(req request.StatCollectionRequest, device_id, m
 		Duration:    int32(req.Duration),
 		PollingRate: int32(req.PollingRate),
 		Stage:       ToEnumDataCollectionStage[req.StatCollectionStage],
+		Direction:   ToEnumRecordingDirection[req.Direction],
 		StartedAt:   timestamppb.New(req.StartedAt),
 		CreatedAt:   timestamppb.New(req.CreatedAt),
 		EndedAt:     timestamppb.New(req.EndedAt),
