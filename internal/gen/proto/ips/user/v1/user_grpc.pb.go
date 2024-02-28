@@ -4,7 +4,7 @@
 // - protoc             (unknown)
 // source: ips/user/v1/user.proto
 
-package rssiv1
+package userv1
 
 import (
 	context "context"
@@ -36,7 +36,7 @@ func NewUserManagerServiceClient(cc grpc.ClientConnInterface) UserManagerService
 
 func (c *userManagerServiceClient) GetCoordinate(ctx context.Context, in *GetCoordinateRequest, opts ...grpc.CallOption) (*GetCoordinateResponse, error) {
 	out := new(GetCoordinateResponse)
-	err := c.cc.Invoke(ctx, "/ips.rssi.v1.UserManagerService/GetCoordinate", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/ips.user.v1.UserManagerService/GetCoordinate", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -45,7 +45,7 @@ func (c *userManagerServiceClient) GetCoordinate(ctx context.Context, in *GetCoo
 
 func (c *userManagerServiceClient) RegisterAp(ctx context.Context, in *RegisterApRequest, opts ...grpc.CallOption) (*RegisterApResponse, error) {
 	out := new(RegisterApResponse)
-	err := c.cc.Invoke(ctx, "/ips.rssi.v1.UserManagerService/RegisterAp", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/ips.user.v1.UserManagerService/RegisterAp", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -94,7 +94,7 @@ func _UserManagerService_GetCoordinate_Handler(srv interface{}, ctx context.Cont
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/ips.rssi.v1.UserManagerService/GetCoordinate",
+		FullMethod: "/ips.user.v1.UserManagerService/GetCoordinate",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(UserManagerServiceServer).GetCoordinate(ctx, req.(*GetCoordinateRequest))
@@ -112,7 +112,7 @@ func _UserManagerService_RegisterAp_Handler(srv interface{}, ctx context.Context
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/ips.rssi.v1.UserManagerService/RegisterAp",
+		FullMethod: "/ips.user.v1.UserManagerService/RegisterAp",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(UserManagerServiceServer).RegisterAp(ctx, req.(*RegisterApRequest))
@@ -124,7 +124,7 @@ func _UserManagerService_RegisterAp_Handler(srv interface{}, ctx context.Context
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var UserManagerService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "ips.rssi.v1.UserManagerService",
+	ServiceName: "ips.user.v1.UserManagerService",
 	HandlerType: (*UserManagerServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

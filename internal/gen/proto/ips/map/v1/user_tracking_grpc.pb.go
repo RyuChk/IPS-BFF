@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.2.0
 // - protoc             (unknown)
-// source: ips/map/v1/userTracking.proto
+// source: ips/map/v1/user_tracking.proto
 
 package mapv1
 
@@ -137,5 +137,5 @@ var UserTrackingService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "ips/map/v1/userTracking.proto",
+	Metadata: "ips/map/v1/user_tracking.proto",
 }
