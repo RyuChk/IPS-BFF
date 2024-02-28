@@ -1,6 +1,6 @@
 module github.com/ZecretBone/ips-bff
 
-go 1.21.5
+go 1.21.3
 
 require (
 	git.cie-ips.com/ips/wire-provider v1.0.1

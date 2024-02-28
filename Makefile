@@ -4,7 +4,7 @@ GO_FILES = $(shell find . -name \*.go)
 GO_BUILDFLAG ?= -v trimpath$(if $(GO_TAGS), -tags $(GO_TAGS),)
 GO_TESTFLAGS ?= -tags "test$(if $)"
 GOTESTFLAGS ?= -tags "test$(if $(GO_TAGS),$(comma)$(GO_TAGS),)" -short -race
-GOPRIVATE=*.cie.com
+GOPRIVATE=*.cie-ipe.com
 GOINSECURE=*
 
 all: generate build
@@ -13,7 +13,7 @@ preparebeta:
 	@printf \\e[1m"Create beta env file"\\e[0m\\n
 	@$(GO) mod vendor
 	@cp -n .env.example .env.beta || true
-	@export GOPRIVATE=*.cie.com
+	@export GOPRIVATE=*.cie-ips.com
 	@export GOINSECURE=*
 	@printf \\e[1m"-------------------Finish init beta environment-------------------"\\e[0m\\n
 

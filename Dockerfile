@@ -1,6 +1,6 @@
 FROM golang:1.21-bookworm AS builder
 
-ENV GOPRIVATE=*.cie.com
+ENV GOPRIVATE=*.cie-ips.com
 ENV GOINSECURE=*
 RUN git config --global http.sslverify false
 RUN curl -sSL "https://github.com/bufbuild/buf/releases/download/v1.26.1/buf-$(uname -s)-$(uname -m)" -o "/usr/local/bin/buf" && chmod +x /usr/local/bin/buf

@@ -14,7 +14,7 @@ include:
 variables:
   OUTPUT_NAME: __bin__/$CI_PROJECT_NAME
   GOPRIVATE: "git.cie-ips.com"
-  GOINSECURE: "*.cie.com"
+  GOINSECURE: "*.cie-ips.com"
   SERVICE_NAME: bff-service
   SKIP_BUILD:
     description: Skip build docker image
@@ -98,7 +98,7 @@ build:
       --context "${CI_PROJECT_DIR}"
       --dockerfile "${CI_PROJECT_DIR}/Dockerfile"
       --destination "$CI_REGISTRY/ips/${SERVICE_NAME}${tag}"
-      --registry-certificate harbor.cie.com=/kaniko/ssl/certs/ca-certificates.crt
+      --registry-certificate harbor.cie-ips.com=/kaniko/ssl/certs/ca-certificates.crt
       
   rules:
     - if: $SKIP_BUILD == "true"
