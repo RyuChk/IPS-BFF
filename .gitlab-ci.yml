@@ -13,7 +13,7 @@ include:
 
 variables:
   OUTPUT_NAME: __bin__/$CI_PROJECT_NAME
-  GOPRIVATE: "git.cie.com"
+  GOPRIVATE: "git.cie-ips.com"
   GOINSECURE: "*.cie.com"
   SERVICE_NAME: bff-service
   SKIP_BUILD:

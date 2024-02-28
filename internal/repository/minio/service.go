@@ -8,7 +8,7 @@ import (
 	"net/url"
 	"time"
 
-	wireminio "git.cie.com/ips/wire-provider/minio"
+	wireminio "git.cie-ips.com/ips/wire-provider/minio"
 	"github.com/ZecretBone/ips-bff/internal/config"
 	"github.com/minio/minio-go/v7"
 	"github.com/rs/zerolog/log"

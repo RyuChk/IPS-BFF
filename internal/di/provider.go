@@ -1,8 +1,8 @@
 package di
 
 import (
-	wireminio "git.cie.com/ips/wire-provider/minio"
-	wiremongo "git.cie.com/ips/wire-provider/mongodb"
+	wireminio "git.cie-ips.com/ips/wire-provider/minio"
+	wiremongo "git.cie-ips.com/ips/wire-provider/mongodb"
 	"github.com/ZecretBone/ips-bff/internal/config"
 	"github.com/ZecretBone/ips-bff/internal/repository/cache"
 	datacollectionclient "github.com/ZecretBone/ips-bff/internal/repository/grpc/dataCollectionClient"

@@ -1,8 +1,8 @@
 package server
 
 import (
-	wiregin "git.cie.com/ips/wire-provider/gin"
-	"git.cie.com/ips/wire-provider/gin/provider"
+	wiregin "git.cie-ips.com/ips/wire-provider/gin"
+	"git.cie-ips.com/ips/wire-provider/gin/provider"
 
 	"github.com/ZecretBone/ips-bff/cmd/bff-api/handler"
 	"github.com/ZecretBone/ips-bff/routers"

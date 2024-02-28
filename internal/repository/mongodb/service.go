@@ -1,7 +1,7 @@
 package mongodb
 
 import (
-	wiremongo "git.cie.com/ips/wire-provider/mongodb"
+	wiremongo "git.cie-ips.com/ips/wire-provider/mongodb"
 )
 
 // ProvideMongoDBService
