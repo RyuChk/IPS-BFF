@@ -80,7 +80,7 @@ tests:
 
 build:
   stage: build
-  retry: 10
+  retry: 2
   image:
     name: gcr.io/kaniko-project/executor:v1.19.2-debug
     entrypoint: [""]
@@ -121,6 +121,7 @@ tag:
 
 release:
   stage: release
+  retry: 2
   extends:
     - .deploy-argo
   image: ubuntu:22.04
