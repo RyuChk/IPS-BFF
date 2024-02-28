@@ -94,6 +94,11 @@ func (m *middleware) getUserInfo(c *gin.Context) UserInfo {
 	}
 	defer resp.Body.Close()
 
+	if resp.StatusCode != http.StatusAccepted {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "unauthorized or expired"})
+		c.Abort()
+	}
+
 	// Read the response body
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
