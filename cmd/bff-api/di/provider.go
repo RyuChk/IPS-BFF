@@ -16,6 +16,7 @@ var ProviderSet = wire.NewSet(
 	handler.ProvideUserTrackingHandler,
 	handler.ProvideUserTrackingSSEHandler,
 	handler.ProvideMapHandler,
+	handler.ProvideUserManagerHandler,
 	wire.Struct(new(handler.Handlers), "*"),
 )
 

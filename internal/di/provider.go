@@ -7,6 +7,7 @@ import (
 	"github.com/ZecretBone/ips-bff/internal/repository/cache"
 	datacollectionclient "github.com/ZecretBone/ips-bff/internal/repository/grpc/dataCollectionClient"
 	mapgrpcclient "github.com/ZecretBone/ips-bff/internal/repository/grpc/mapClient"
+	usermanagerclient "github.com/ZecretBone/ips-bff/internal/repository/grpc/userManagerClient"
 	usertrackingclient "github.com/ZecretBone/ips-bff/internal/repository/grpc/userTrackingClient"
 	"github.com/ZecretBone/ips-bff/internal/repository/minio"
 	"github.com/ZecretBone/ips-bff/internal/repository/mongodb"
@@ -23,6 +24,7 @@ var ProviderSet = wire.NewSet(
 	mapgrpcclient.ProvideMapService,
 	datacollectionclient.ProvideDataCollectionGRPCClient,
 	usertrackingclient.ProvideUserTrackingService,
+	usermanagerclient.ProvideUserManagerGRPCClient,
 )
 
 var ConfigSet = wire.NewSet(
