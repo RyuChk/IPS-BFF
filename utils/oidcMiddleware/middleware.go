@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
+	"github.com/rs/zerolog/log"
 )
 
 type middleware struct {
@@ -110,6 +111,7 @@ func (m *middleware) getUserInfo(c *gin.Context) (UserInfo, *errorMessage) {
 	// Send the request
 	resp, err := client.Do(req)
 	if err != nil {
+		log.Error().Err(err).Msg("error sending request to oidc")
 		return UserInfo{}, &errorMessage{
 			Code:    http.StatusInternalServerError,
 			Message: "error sending request to oidc",
@@ -117,7 +119,8 @@ func (m *middleware) getUserInfo(c *gin.Context) (UserInfo, *errorMessage) {
 	}
 	defer resp.Body.Close()
 
-	if resp.StatusCode != http.StatusAccepted {
+	if resp.StatusCode != http.StatusOK {
+		log.Error().Int("status_code", resp.StatusCode).Msg("error sending request to oidc")
 		return UserInfo{}, &errorMessage{
 			Code:    http.StatusUnauthorized,
 			Message: "unauthorized or expired",
