@@ -14,6 +14,7 @@ import (
 	"github.com/ZecretBone/ips-bff/internal/di"
 	"github.com/ZecretBone/ips-bff/internal/repository/grpc/dataCollectionClient"
 	"github.com/ZecretBone/ips-bff/internal/repository/grpc/mapClient"
+	"github.com/ZecretBone/ips-bff/internal/repository/grpc/userManagerClient"
 	"github.com/ZecretBone/ips-bff/internal/repository/grpc/userTrackingClient"
 	"github.com/google/wire"
 )
@@ -27,12 +28,15 @@ func InitializeContainer() (*Container, func(), error) {
 	usertrackingclientService := usertrackingclient.ProvideUserTrackingService(grpcConfig)
 	userTrackingHandler := handler.ProvideUserTrackingHandler(usertrackingclientService)
 	userTrackingSSEHandler := handler.ProvideUserTrackingSSEHandler(usertrackingclientService)
+	usermanagerclientService := usermanagerclient.ProvideUserManagerGRPCClient(grpcConfig)
+	userManagerHandler := handler.ProvideUserManagerHandler(usermanagerclientService)
 	mapgrpcclientService := mapgrpcclient.ProvideMapService(grpcConfig)
 	mapHandler := handler.ProvideMapHandler(mapgrpcclientService)
 	handlers := handler.Handlers{
 		StatCollection:  dataCollectionHandler,
 		UserTracking:    userTrackingHandler,
 		UserTrackingSSE: userTrackingSSEHandler,
+		UserManager:     userManagerHandler,
 		Map:             mapHandler,
 	}
 	routerCustomizer := server.ProvideGinRouterCustomizer(handlers)
