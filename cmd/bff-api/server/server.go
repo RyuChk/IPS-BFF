@@ -18,6 +18,7 @@ func (gc *ginRouterCustomizer) Register(server *wiregin.Server) error {
 }
 
 func (gc *ginRouterCustomizer) Configure(builder wiregin.Builder) error {
+	builder.WithHealthCheck(true).WithMetric(true)
 	return nil
 }
 
