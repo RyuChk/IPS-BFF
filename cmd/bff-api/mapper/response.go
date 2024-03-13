@@ -2,8 +2,22 @@ package mapper
 
 import (
 	mapv1 "github.com/ZecretBone/ips-bff/internal/gen/proto/ips/map/v1"
+	userv1 "github.com/ZecretBone/ips-bff/internal/gen/proto/ips/user/v1"
 	"github.com/ZecretBone/ips-bff/internal/models"
+	"github.com/ZecretBone/ips-bff/internal/models/response"
 )
+
+func ToGetCoordinateResponse(raw *userv1.GetCoordinateResponse) response.GetSingleCoordinateResponse {
+	result := response.GetSingleCoordinateResponse{
+		X:        float64(raw.Position.X),
+		Y:        float64(raw.Position.Y),
+		Z:        float64(raw.Position.Z),
+		Label:    raw.Label,
+		Building: raw.Building,
+	}
+
+	return result
+}
 
 func MapFetchResponseToOnlineUserStruct(resp *mapv1.FetchOnlineUserResponse) []models.OnlineUser {
 	result := make([]models.OnlineUser, len(resp.OnlineUsers))

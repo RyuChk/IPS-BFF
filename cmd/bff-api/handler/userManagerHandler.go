@@ -5,7 +5,10 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/ZecretBone/ips-bff/cmd/bff-api/mapper"
+	shareduserv1 "github.com/ZecretBone/ips-bff/internal/gen/proto/ips/shared/user/v1"
 	userv1 "github.com/ZecretBone/ips-bff/internal/gen/proto/ips/user/v1"
+	"github.com/ZecretBone/ips-bff/internal/models/request"
 	usermanagerclient "github.com/ZecretBone/ips-bff/internal/repository/grpc/userManagerClient"
 	oidcmiddleware "github.com/ZecretBone/ips-bff/utils/oidcMiddleware"
 	"github.com/gin-gonic/gin"
@@ -19,6 +22,7 @@ var upgrader = websocket.Upgrader{
 
 type UserManagerHandler interface {
 	GetCoordinate(ctx *gin.Context)
+	GetSingleCoordinate(ctx *gin.Context)
 }
 
 type userManagerHandler struct {
@@ -41,20 +45,51 @@ func messageHandler(msg []byte) (*userv1.GetCoordinateRequest, error) {
 	return &message, nil
 }
 
+func (rs *userManagerHandler) GetSingleCoordinate(ctx *gin.Context) {
+
+	userInfo, err := oidcmiddleware.GetUserInfoFromContext(ctx)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Failed to get user info"})
+		return
+	}
+
+	is_admin := ToUserV1RoleEnum[oidcmiddleware.MatchRole(userInfo.Groups)] == shareduserv1.Role_ROLE_ADMIN
+
+	var body request.GetSingleCoordinateRequest
+	if err := ctx.BindJSON(&body); err != nil {
+		ctx.JSON(http.StatusBadRequest, err.Error())
+		return
+	}
+
+	data := mapper.ToGetCoordinateRequest(body, userInfo.PreferredUsername, is_admin)
+
+	predictedCoordinate, err := rs.userManagerClient.GetCoordinate(ctx, data)
+
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, err.Error())
+		return
+	}
+
+	ctx.JSON(http.StatusOK, mapper.ToGetCoordinateResponse(predictedCoordinate))
+
+}
+
 func (rs *userManagerHandler) GetCoordinate(ctx *gin.Context) {
 	userInfo, err := oidcmiddleware.GetUserInfoFromContext(ctx)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Failed to get user info"})
+		return
+	}
+
 	role := ToUserV1RoleEnum[oidcmiddleware.MatchRole(userInfo.Groups)]
 	is_admin := false
 	if role == 1 {
 		is_admin = true
 	}
-	if err != nil {
-		ctx.JSON(http.StatusBadRequest, err)
-	}
 
 	conn, err := upgrader.Upgrade(ctx.Writer, ctx.Request, nil)
 	if err != nil {
-		log.Println(err)
+		log.Println("WebSocket upgrade failed:", err)
 		return
 	}
 	defer conn.Close()
@@ -62,30 +97,31 @@ func (rs *userManagerHandler) GetCoordinate(ctx *gin.Context) {
 	for {
 		messageType, p, err := conn.ReadMessage()
 		if err != nil {
-			log.Println(err)
-			return
+			log.Println("WebSocket read error:", err)
+			break
 		}
 		if messageType == websocket.TextMessage {
 			message, err := messageHandler(p)
 			if err != nil {
+				log.Println("Message parsing error:", err)
 				continue
 			}
 			message.User = userInfo.Name
 			message.IsAdmin = is_admin
 			predictedCoordinate, err := rs.userManagerClient.GetCoordinate(ctx, message)
 			if err != nil {
+				log.Println("GetCoordinate error:", err)
 				continue
 			}
 			jsonMessage, err := json.Marshal(predictedCoordinate)
 			if err != nil {
+				log.Println("JSON marshaling error:", err)
 				continue
 			}
 			if err := conn.WriteMessage(websocket.TextMessage, jsonMessage); err != nil {
+				log.Println("WebSocket write error:", err)
 				continue
 			}
 		}
-
 	}
-
-	//ctx.JSON(http.StatusOK, "success")
 }
