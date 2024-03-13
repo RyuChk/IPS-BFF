@@ -14,8 +14,9 @@ import (
 
 //go:generate mockgen -source=service.go -destination=mock_mapclient/mock_service.go -package=mock_mapclient
 type Service interface {
-	GetFloorList(ctx context.Context, body *mapv1.GetFloorListRequest) (*mapv1.GetFloorListResponse, error)
-	GetFloorMapURL(ctx context.Context, body *mapv1.GetMapURLRequest) (*mapv1.GetMapURLResponse, error)
+	GetBuildingList(ctx context.Context, body *mapv1.GetBuildingListRequest) (*mapv1.GetBuildingListResponse, error)
+	GetBuildingDetail(ctx context.Context, body *mapv1.GetBuildingInfoRequest) (*mapv1.GetBuildingInfoResponse, error)
+	GetFloorDetail(ctx context.Context, body *mapv1.GetFloorInfoRequest) (*mapv1.GetFloorInfoResponse, error)
 }
 
 type mapGRPCClientService struct {
@@ -25,7 +26,7 @@ type mapGRPCClientService struct {
 func ProvideMapService(config config.GRPCConfig) Service {
 	var conn *grpc.ClientConn
 	if currentEnvironment, ok := os.LookupEnv("ENV"); ok && currentEnvironment == "beta" {
-		c, err := grpc.Dial(config.DataCollectionGRPCHost, grpc.WithTransportCredentials(insecure.NewCredentials()))
+		c, err := grpc.Dial(config.MapGRPCHost, grpc.WithTransportCredentials(insecure.NewCredentials()))
 		if err != nil {
 			panic(err)
 		}
@@ -45,8 +46,8 @@ func ProvideMapService(config config.GRPCConfig) Service {
 	}
 }
 
-func (s *mapGRPCClientService) GetFloorList(ctx context.Context, body *mapv1.GetFloorListRequest) (*mapv1.GetFloorListResponse, error) {
-	res, err := s.client.GetFloorList(ctx, body)
+func (s *mapGRPCClientService) GetBuildingList(ctx context.Context, body *mapv1.GetBuildingListRequest) (*mapv1.GetBuildingListResponse, error) {
+	res, err := s.client.GetBuildingList(ctx, body)
 	if err != nil {
 		return nil, err
 	}
@@ -54,8 +55,17 @@ func (s *mapGRPCClientService) GetFloorList(ctx context.Context, body *mapv1.Get
 	return res, nil
 }
 
-func (s *mapGRPCClientService) GetFloorMapURL(ctx context.Context, body *mapv1.GetMapURLRequest) (*mapv1.GetMapURLResponse, error) {
-	res, err := s.client.GetMapURL(ctx, body)
+func (s *mapGRPCClientService) GetBuildingDetail(ctx context.Context, body *mapv1.GetBuildingInfoRequest) (*mapv1.GetBuildingInfoResponse, error) {
+	res, err := s.client.GetBuildingInfo(ctx, body)
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
+}
+
+func (s *mapGRPCClientService) GetFloorDetail(ctx context.Context, body *mapv1.GetFloorInfoRequest) (*mapv1.GetFloorInfoResponse, error) {
+	res, err := s.client.GetFloorInfo(ctx, body)
 	if err != nil {
 		return nil, err
 	}

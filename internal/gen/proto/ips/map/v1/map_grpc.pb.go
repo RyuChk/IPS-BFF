@@ -22,10 +22,12 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type MapServiceClient interface {
-	GetFloorList(ctx context.Context, in *GetFloorListRequest, opts ...grpc.CallOption) (*GetFloorListResponse, error)
+	AddBuilding(ctx context.Context, in *AddBuildingRequest, opts ...grpc.CallOption) (*AddBuildingResponse, error)
 	AddFloor(ctx context.Context, in *AddFloorRequest, opts ...grpc.CallOption) (*AddFloorResponse, error)
-	GetMapURL(ctx context.Context, in *GetMapURLRequest, opts ...grpc.CallOption) (*GetMapURLResponse, error)
-	AddMapURL(ctx context.Context, in *AddMapURLRequest, opts ...grpc.CallOption) (*AddMapURLResponse, error)
+	AddFloorDetail(ctx context.Context, in *AddFloorDetailRequest, opts ...grpc.CallOption) (*AddFloorDetailResponse, error)
+	GetBuildingList(ctx context.Context, in *GetBuildingListRequest, opts ...grpc.CallOption) (*GetBuildingListResponse, error)
+	GetBuildingInfo(ctx context.Context, in *GetBuildingInfoRequest, opts ...grpc.CallOption) (*GetBuildingInfoResponse, error)
+	GetFloorInfo(ctx context.Context, in *GetFloorInfoRequest, opts ...grpc.CallOption) (*GetFloorInfoResponse, error)
 }
 
 type mapServiceClient struct {
@@ -36,9 +38,9 @@ func NewMapServiceClient(cc grpc.ClientConnInterface) MapServiceClient {
 	return &mapServiceClient{cc}
 }
 
-func (c *mapServiceClient) GetFloorList(ctx context.Context, in *GetFloorListRequest, opts ...grpc.CallOption) (*GetFloorListResponse, error) {
-	out := new(GetFloorListResponse)
-	err := c.cc.Invoke(ctx, "/ips.map.v1.MapService/GetFloorList", in, out, opts...)
+func (c *mapServiceClient) AddBuilding(ctx context.Context, in *AddBuildingRequest, opts ...grpc.CallOption) (*AddBuildingResponse, error) {
+	out := new(AddBuildingResponse)
+	err := c.cc.Invoke(ctx, "/ips.map.v1.MapService/AddBuilding", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -54,18 +56,36 @@ func (c *mapServiceClient) AddFloor(ctx context.Context, in *AddFloorRequest, op
 	return out, nil
 }
 
-func (c *mapServiceClient) GetMapURL(ctx context.Context, in *GetMapURLRequest, opts ...grpc.CallOption) (*GetMapURLResponse, error) {
-	out := new(GetMapURLResponse)
-	err := c.cc.Invoke(ctx, "/ips.map.v1.MapService/GetMapURL", in, out, opts...)
+func (c *mapServiceClient) AddFloorDetail(ctx context.Context, in *AddFloorDetailRequest, opts ...grpc.CallOption) (*AddFloorDetailResponse, error) {
+	out := new(AddFloorDetailResponse)
+	err := c.cc.Invoke(ctx, "/ips.map.v1.MapService/AddFloorDetail", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *mapServiceClient) AddMapURL(ctx context.Context, in *AddMapURLRequest, opts ...grpc.CallOption) (*AddMapURLResponse, error) {
-	out := new(AddMapURLResponse)
-	err := c.cc.Invoke(ctx, "/ips.map.v1.MapService/AddMapURL", in, out, opts...)
+func (c *mapServiceClient) GetBuildingList(ctx context.Context, in *GetBuildingListRequest, opts ...grpc.CallOption) (*GetBuildingListResponse, error) {
+	out := new(GetBuildingListResponse)
+	err := c.cc.Invoke(ctx, "/ips.map.v1.MapService/GetBuildingList", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *mapServiceClient) GetBuildingInfo(ctx context.Context, in *GetBuildingInfoRequest, opts ...grpc.CallOption) (*GetBuildingInfoResponse, error) {
+	out := new(GetBuildingInfoResponse)
+	err := c.cc.Invoke(ctx, "/ips.map.v1.MapService/GetBuildingInfo", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *mapServiceClient) GetFloorInfo(ctx context.Context, in *GetFloorInfoRequest, opts ...grpc.CallOption) (*GetFloorInfoResponse, error) {
+	out := new(GetFloorInfoResponse)
+	err := c.cc.Invoke(ctx, "/ips.map.v1.MapService/GetFloorInfo", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -76,10 +96,12 @@ func (c *mapServiceClient) AddMapURL(ctx context.Context, in *AddMapURLRequest, 
 // All implementations must embed UnimplementedMapServiceServer
 // for forward compatibility
 type MapServiceServer interface {
-	GetFloorList(context.Context, *GetFloorListRequest) (*GetFloorListResponse, error)
+	AddBuilding(context.Context, *AddBuildingRequest) (*AddBuildingResponse, error)
 	AddFloor(context.Context, *AddFloorRequest) (*AddFloorResponse, error)
-	GetMapURL(context.Context, *GetMapURLRequest) (*GetMapURLResponse, error)
-	AddMapURL(context.Context, *AddMapURLRequest) (*AddMapURLResponse, error)
+	AddFloorDetail(context.Context, *AddFloorDetailRequest) (*AddFloorDetailResponse, error)
+	GetBuildingList(context.Context, *GetBuildingListRequest) (*GetBuildingListResponse, error)
+	GetBuildingInfo(context.Context, *GetBuildingInfoRequest) (*GetBuildingInfoResponse, error)
+	GetFloorInfo(context.Context, *GetFloorInfoRequest) (*GetFloorInfoResponse, error)
 	mustEmbedUnimplementedMapServiceServer()
 }
 
@@ -87,17 +109,23 @@ type MapServiceServer interface {
 type UnimplementedMapServiceServer struct {
 }
 
-func (UnimplementedMapServiceServer) GetFloorList(context.Context, *GetFloorListRequest) (*GetFloorListResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetFloorList not implemented")
+func (UnimplementedMapServiceServer) AddBuilding(context.Context, *AddBuildingRequest) (*AddBuildingResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddBuilding not implemented")
 }
 func (UnimplementedMapServiceServer) AddFloor(context.Context, *AddFloorRequest) (*AddFloorResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method AddFloor not implemented")
 }
-func (UnimplementedMapServiceServer) GetMapURL(context.Context, *GetMapURLRequest) (*GetMapURLResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetMapURL not implemented")
+func (UnimplementedMapServiceServer) AddFloorDetail(context.Context, *AddFloorDetailRequest) (*AddFloorDetailResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddFloorDetail not implemented")
 }
-func (UnimplementedMapServiceServer) AddMapURL(context.Context, *AddMapURLRequest) (*AddMapURLResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method AddMapURL not implemented")
+func (UnimplementedMapServiceServer) GetBuildingList(context.Context, *GetBuildingListRequest) (*GetBuildingListResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetBuildingList not implemented")
+}
+func (UnimplementedMapServiceServer) GetBuildingInfo(context.Context, *GetBuildingInfoRequest) (*GetBuildingInfoResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetBuildingInfo not implemented")
+}
+func (UnimplementedMapServiceServer) GetFloorInfo(context.Context, *GetFloorInfoRequest) (*GetFloorInfoResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetFloorInfo not implemented")
 }
 func (UnimplementedMapServiceServer) mustEmbedUnimplementedMapServiceServer() {}
 
@@ -112,20 +140,20 @@ func RegisterMapServiceServer(s grpc.ServiceRegistrar, srv MapServiceServer) {
 	s.RegisterService(&MapService_ServiceDesc, srv)
 }
 
-func _MapService_GetFloorList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetFloorListRequest)
+func _MapService_AddBuilding_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddBuildingRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MapServiceServer).GetFloorList(ctx, in)
+		return srv.(MapServiceServer).AddBuilding(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/ips.map.v1.MapService/GetFloorList",
+		FullMethod: "/ips.map.v1.MapService/AddBuilding",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MapServiceServer).GetFloorList(ctx, req.(*GetFloorListRequest))
+		return srv.(MapServiceServer).AddBuilding(ctx, req.(*AddBuildingRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -148,38 +176,74 @@ func _MapService_AddFloor_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
-func _MapService_GetMapURL_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetMapURLRequest)
+func _MapService_AddFloorDetail_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddFloorDetailRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MapServiceServer).GetMapURL(ctx, in)
+		return srv.(MapServiceServer).AddFloorDetail(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/ips.map.v1.MapService/GetMapURL",
+		FullMethod: "/ips.map.v1.MapService/AddFloorDetail",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MapServiceServer).GetMapURL(ctx, req.(*GetMapURLRequest))
+		return srv.(MapServiceServer).AddFloorDetail(ctx, req.(*AddFloorDetailRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _MapService_AddMapURL_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(AddMapURLRequest)
+func _MapService_GetBuildingList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetBuildingListRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MapServiceServer).AddMapURL(ctx, in)
+		return srv.(MapServiceServer).GetBuildingList(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/ips.map.v1.MapService/AddMapURL",
+		FullMethod: "/ips.map.v1.MapService/GetBuildingList",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MapServiceServer).AddMapURL(ctx, req.(*AddMapURLRequest))
+		return srv.(MapServiceServer).GetBuildingList(ctx, req.(*GetBuildingListRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _MapService_GetBuildingInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetBuildingInfoRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MapServiceServer).GetBuildingInfo(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ips.map.v1.MapService/GetBuildingInfo",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MapServiceServer).GetBuildingInfo(ctx, req.(*GetBuildingInfoRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _MapService_GetFloorInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetFloorInfoRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MapServiceServer).GetFloorInfo(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ips.map.v1.MapService/GetFloorInfo",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MapServiceServer).GetFloorInfo(ctx, req.(*GetFloorInfoRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -192,20 +256,28 @@ var MapService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*MapServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "GetFloorList",
-			Handler:    _MapService_GetFloorList_Handler,
+			MethodName: "AddBuilding",
+			Handler:    _MapService_AddBuilding_Handler,
 		},
 		{
 			MethodName: "AddFloor",
 			Handler:    _MapService_AddFloor_Handler,
 		},
 		{
-			MethodName: "GetMapURL",
-			Handler:    _MapService_GetMapURL_Handler,
+			MethodName: "AddFloorDetail",
+			Handler:    _MapService_AddFloorDetail_Handler,
 		},
 		{
-			MethodName: "AddMapURL",
-			Handler:    _MapService_AddMapURL_Handler,
+			MethodName: "GetBuildingList",
+			Handler:    _MapService_GetBuildingList_Handler,
+		},
+		{
+			MethodName: "GetBuildingInfo",
+			Handler:    _MapService_GetBuildingInfo_Handler,
+		},
+		{
+			MethodName: "GetFloorInfo",
+			Handler:    _MapService_GetFloorInfo_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -3,45 +3,7 @@ package mapper
 import (
 	mapv1 "github.com/ZecretBone/ips-bff/internal/gen/proto/ips/map/v1"
 	"github.com/ZecretBone/ips-bff/internal/models"
-	"github.com/ZecretBone/ips-bff/internal/models/response"
 )
-
-func ToGetFloorListResponse(raw *mapv1.GetFloorListResponse) response.GetMapFloorListResponse {
-	result := response.GetMapFloorListResponse{
-		Floors:  make([]models.Map, len(raw.Floors)),
-		IsAdmin: false,
-	}
-
-	for i, v := range raw.Floors {
-		result.Floors[i] = models.Map{
-			Name:        v.Name,
-			Description: v.Description,
-			Building:    v.Building,
-			Number:      int(v.Number),
-			Symbol:      v.Symbol,
-			IsAdmin:     v.IsAdmin,
-		}
-	}
-
-	return result
-}
-
-func ToGetMapURLResponse(raw *mapv1.GetMapURLResponse) response.GetMapURLResponse {
-	result := response.GetMapURLResponse{
-		Detail: models.Map{
-			Name:        raw.Detail.Name,
-			Description: raw.Detail.Description,
-			Building:    raw.Detail.Building,
-			Number:      int(raw.Detail.Number),
-			Symbol:      raw.Detail.Symbol,
-			IsAdmin:     raw.Detail.IsAdmin,
-		},
-		URL:       raw.Url,
-		UpdatedAt: raw.UpdatedAt.AsTime(),
-	}
-
-	return result
-}
 
 func MapFetchResponseToOnlineUserStruct(resp *mapv1.FetchOnlineUserResponse) []models.OnlineUser {
 	result := make([]models.OnlineUser, len(resp.OnlineUsers))
@@ -54,6 +16,68 @@ func MapFetchResponseToOnlineUserStruct(resp *mapv1.FetchOnlineUserResponse) []m
 				Z: float64(v.Coordinate.Z),
 			},
 			Timestamp: v.Timestamp.AsTime(),
+		}
+	}
+
+	return result
+}
+
+func ToBuildingModelList(body *mapv1.GetBuildingListResponse) []models.Building {
+	result := make([]models.Building, len(body.Buildings))
+
+	for i, v := range body.Buildings {
+		result[i] = models.Building{
+			Name:        v.Name,
+			Description: v.Description,
+			OriginLat:   v.OriginLat,
+			OriginLong:  v.OriginLong,
+		}
+	}
+
+	return result
+}
+
+func ToBuildingDetailModel(body *mapv1.GetBuildingInfoResponse) models.Building {
+	result := models.Building{
+		Name:        body.Name,
+		Description: body.Description,
+		FloorList:   make([]models.Floor, len(body.Floors)),
+		OriginLat:   body.OriginLat,
+		OriginLong:  body.OriginLong,
+	}
+
+	for i, v := range body.Floors {
+		result.FloorList[i] = models.Floor{
+			Name:     v.Name,
+			Building: v.Building,
+			Floor:    int(v.Floor),
+			Symbol:   v.Symbol,
+			IsAdmin:  v.IsAdmin,
+		}
+	}
+
+	return result
+}
+
+func ToFloorDetailModel(body *mapv1.GetFloorInfoResponse) models.FloorDetail {
+	result := models.FloorDetail{
+		Info: models.Floor{
+			Name:     body.Info.Name,
+			Building: body.Info.Building,
+			Floor:    int(body.Info.Floor),
+			Symbol:   body.Info.Symbol,
+			IsAdmin:  body.Info.IsAdmin,
+		},
+		RoomList: make([]models.Room, len(body.Rooms)),
+	}
+
+	for i, v := range body.Rooms {
+		result.RoomList[i] = models.Room{
+			RoomID:      v.RoomId,
+			Name:        v.Name,
+			Description: v.Description,
+			Latitude:    v.Latitude,
+			Longitude:   v.Longitude,
 		}
 	}
 
