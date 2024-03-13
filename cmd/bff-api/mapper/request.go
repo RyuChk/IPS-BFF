@@ -4,6 +4,7 @@ import (
 	"github.com/ZecretBone/ips-bff/internal/constants"
 	v1 "github.com/ZecretBone/ips-bff/internal/gen/proto/ips/rssi/v1"
 	rssiv1 "github.com/ZecretBone/ips-bff/internal/gen/proto/ips/shared/rssi/v1"
+	userv1 "github.com/ZecretBone/ips-bff/internal/gen/proto/ips/user/v1"
 	"github.com/ZecretBone/ips-bff/internal/models/request"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
@@ -21,6 +22,35 @@ var (
 		constants.West:  rssiv1.RecordingDirection_RECORDING_DIRECTION_WEST,
 	}
 )
+
+func ToGetCoordinateRequest(req request.GetSingleCoordinateRequest, user string, isAdmin bool) *userv1.GetCoordinateRequest {
+	var data userv1.GetCoordinateRequest
+
+	signals := make([]*rssiv1.RSSI, len(req.Signals))
+
+	for i, v := range req.Signals {
+
+		time := make([]*timestamppb.Timestamp, len(v.CreatedAt))
+		for j, t := range v.CreatedAt {
+			time[j] = timestamppb.New(t)
+		}
+
+		signals[i] = &rssiv1.RSSI{
+			Ssid:       v.SSID,
+			MacAddress: v.MacAddress,
+			Strength:   v.Strength,
+			CreatedAt:  time,
+		}
+	}
+
+	data.Building = req.Building
+	data.User = user
+	data.IsAdmin = isAdmin
+	data.Signals = signals
+
+	return &data
+
+}
 
 func ToDataCollectionDataRequest(req request.StatCollectionRequest, device_id, model string) *v1.CollectDataRequest {
 	signals := make([]*rssiv1.RSSI, len(req.Signals))

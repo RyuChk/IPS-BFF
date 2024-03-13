@@ -5,7 +5,9 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/ZecretBone/ips-bff/cmd/bff-api/mapper"
 	userv1 "github.com/ZecretBone/ips-bff/internal/gen/proto/ips/user/v1"
+	"github.com/ZecretBone/ips-bff/internal/models/request"
 	usermanagerclient "github.com/ZecretBone/ips-bff/internal/repository/grpc/userManagerClient"
 	oidcmiddleware "github.com/ZecretBone/ips-bff/utils/oidcMiddleware"
 	"github.com/gin-gonic/gin"
@@ -39,6 +41,39 @@ func messageHandler(msg []byte) (*userv1.GetCoordinateRequest, error) {
 		return nil, err
 	}
 	return &message, nil
+}
+
+func (rs *userManagerHandler) GetSingleCoordinate(ctx *gin.Context) {
+
+	userInfo, err := oidcmiddleware.GetUserInfoFromContext(ctx)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Failed to get user info"})
+		return
+	}
+
+	role := ToUserV1RoleEnum[oidcmiddleware.MatchRole(userInfo.Groups)]
+	is_admin := false
+	if role == 1 {
+		is_admin = true
+	}
+
+	var body request.GetSingleCoordinateRequest
+	if err := ctx.BindJSON(&body); err != nil {
+		//err
+		ctx.JSON(http.StatusBadRequest, err)
+	}
+
+	data := mapper.ToGetCoordinateRequest(body, userInfo.Name, is_admin)
+
+	predictedCoordinate, err := rs.userManagerClient.GetCoordinate(ctx, data)
+
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, err.Error())
+		return
+	}
+
+	ctx.JSON(http.StatusOK, mapper.ToGetCoordinateResponse(predictedCoordinate))
+
 }
 
 func (rs *userManagerHandler) GetCoordinate(ctx *gin.Context) {
