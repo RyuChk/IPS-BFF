@@ -35,32 +35,47 @@ func (m *MockService) EXPECT() *MockServiceMockRecorder {
 	return m.recorder
 }
 
-// GetFloorList mocks base method.
-func (m *MockService) GetFloorList(ctx context.Context, body *mapv1.GetFloorListRequest) (*mapv1.GetFloorListResponse, error) {
+// GetBuildingDetail mocks base method.
+func (m *MockService) GetBuildingDetail(ctx context.Context, body *mapv1.GetBuildingInfoRequest) (*mapv1.GetBuildingInfoResponse, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetFloorList", ctx, body)
-	ret0, _ := ret[0].(*mapv1.GetFloorListResponse)
+	ret := m.ctrl.Call(m, "GetBuildingDetail", ctx, body)
+	ret0, _ := ret[0].(*mapv1.GetBuildingInfoResponse)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// GetFloorList indicates an expected call of GetFloorList.
-func (mr *MockServiceMockRecorder) GetFloorList(ctx, body interface{}) *gomock.Call {
+// GetBuildingDetail indicates an expected call of GetBuildingDetail.
+func (mr *MockServiceMockRecorder) GetBuildingDetail(ctx, body interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetFloorList", reflect.TypeOf((*MockService)(nil).GetFloorList), ctx, body)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetBuildingDetail", reflect.TypeOf((*MockService)(nil).GetBuildingDetail), ctx, body)
 }
 
-// GetFloorMapURL mocks base method.
-func (m *MockService) GetFloorMapURL(ctx context.Context, body *mapv1.GetMapURLRequest) (*mapv1.GetMapURLResponse, error) {
+// GetBuildingList mocks base method.
+func (m *MockService) GetBuildingList(ctx context.Context, body *mapv1.GetBuildingListRequest) (*mapv1.GetBuildingListResponse, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetFloorMapURL", ctx, body)
-	ret0, _ := ret[0].(*mapv1.GetMapURLResponse)
+	ret := m.ctrl.Call(m, "GetBuildingList", ctx, body)
+	ret0, _ := ret[0].(*mapv1.GetBuildingListResponse)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
-// GetFloorMapURL indicates an expected call of GetFloorMapURL.
-func (mr *MockServiceMockRecorder) GetFloorMapURL(ctx, body interface{}) *gomock.Call {
+// GetBuildingList indicates an expected call of GetBuildingList.
+func (mr *MockServiceMockRecorder) GetBuildingList(ctx, body interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetFloorMapURL", reflect.TypeOf((*MockService)(nil).GetFloorMapURL), ctx, body)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetBuildingList", reflect.TypeOf((*MockService)(nil).GetBuildingList), ctx, body)
+}
+
+// GetFloorDetail mocks base method.
+func (m *MockService) GetFloorDetail(ctx context.Context, body *mapv1.GetFloorInfoRequest) (*mapv1.GetFloorInfoResponse, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetFloorDetail", ctx, body)
+	ret0, _ := ret[0].(*mapv1.GetFloorInfoResponse)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetFloorDetail indicates an expected call of GetFloorDetail.
+func (mr *MockServiceMockRecorder) GetFloorDetail(ctx, body interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetFloorDetail", reflect.TypeOf((*MockService)(nil).GetFloorDetail), ctx, body)
 }

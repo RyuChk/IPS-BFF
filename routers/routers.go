@@ -49,7 +49,8 @@ func RegisterRouter(router *gin.Engine, handlers handler.Handlers) {
 	{
 		mapv1.Use(oidcmiddleware.New(oidcConfig))
 
-		mapv1.GET("/:building", handlers.Map.GetFloorList)
-		mapv1.GET("/img/:building/:floor", handlers.Map.GetFloorMapURL)
+		mapv1.GET("/building", handlers.Map.GetBuildingList)
+		mapv1.GET("/info/:building", handlers.Map.GetBuildingInfo)
+		mapv1.GET("/info/:building/:floor", handlers.Map.GetFloorInfo)
 	}
 }
