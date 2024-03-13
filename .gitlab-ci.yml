@@ -16,6 +16,7 @@ variables:
   GOPRIVATE: "git.cie-ips.com"
   GOINSECURE: "*.cie-ips.com"
   SERVICE_NAME: bff-service
+  GOPROXY: https://go-proxy.cie-ips.com
   SKIP_BUILD:
     description: Skip build docker image
     value: "false"
@@ -61,8 +62,8 @@ tests:
     - git config --global http.sslverify false
   script:
     - go get -t ./...
-    - go install gotest.tools/gotestsum@latest
-    - go install github.com/boumenot/gocover-cobertura@latest
+    - go install gotest.tools/gotestsum@v1.11.0
+    - go install github.com/boumenot/gocover-cobertura@v1.2.0
     # run tests, create coverprofile, and create junit report
     - gotestsum --junitfile report.xml --format testname -- -race -coverprofile=coverage.txt -covermode atomic ./...
     # write coverage report

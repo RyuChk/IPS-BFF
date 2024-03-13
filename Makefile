@@ -6,6 +6,7 @@ GO_TESTFLAGS ?= -tags "test$(if $)"
 GOTESTFLAGS ?= -tags "test$(if $(GO_TAGS),$(comma)$(GO_TAGS),)" -short -race
 GOPRIVATE=*.cie-ipe.com
 GOINSECURE=*
+GOPROXY=https://go-proxy.cie-ips.com
 
 all: generate build
 
