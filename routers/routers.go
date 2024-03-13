@@ -37,7 +37,7 @@ func RegisterRouter(router *gin.Engine, handlers handler.Handlers) {
 		userManagerV1.Use(oidcmiddleware.New(oidcConfig))
 
 		userManagerV1.GET("/ws", handlers.UserManager.GetCoordinate)
-		userManagerV1.GET("/getcoord", handlers.UserManager.GetSingleCoordinate)
+		userManagerV1.POST("/getcoord", handlers.UserManager.GetSingleCoordinate)
 
 		admin := userManagerV1.Group("/admin")
 		{

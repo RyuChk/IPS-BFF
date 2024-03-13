@@ -24,32 +24,31 @@ var (
 )
 
 func ToGetCoordinateRequest(req request.GetSingleCoordinateRequest, user string, isAdmin bool) *userv1.GetCoordinateRequest {
-	var data userv1.GetCoordinateRequest
-
-	signals := make([]*rssiv1.RSSI, len(req.Signals))
+	data := &userv1.GetCoordinateRequest{
+		Building: req.Building,
+		User:     user,
+		IsAdmin:  isAdmin,
+		DeviceInfo: &rssiv1.DeviceInfo{
+			DeviceId: "ID",
+			Model:    "MODEL",
+		},
+		Signals: make([]*rssiv1.RSSI, len(req.Signals)),
+	}
 
 	for i, v := range req.Signals {
-
 		time := make([]*timestamppb.Timestamp, len(v.CreatedAt))
 		for j, t := range v.CreatedAt {
 			time[j] = timestamppb.New(t)
 		}
 
-		signals[i] = &rssiv1.RSSI{
+		data.Signals[i] = &rssiv1.RSSI{
 			Ssid:       v.SSID,
 			MacAddress: v.MacAddress,
 			Strength:   v.Strength,
 			CreatedAt:  time,
 		}
 	}
-
-	data.Building = req.Building
-	data.User = user
-	data.IsAdmin = isAdmin
-	data.Signals = signals
-
-	return &data
-
+	return data
 }
 
 func ToDataCollectionDataRequest(req request.StatCollectionRequest, device_id, model string) *v1.CollectDataRequest {

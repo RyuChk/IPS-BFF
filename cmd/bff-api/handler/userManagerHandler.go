@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/ZecretBone/ips-bff/cmd/bff-api/mapper"
+	shareduserv1 "github.com/ZecretBone/ips-bff/internal/gen/proto/ips/shared/user/v1"
 	userv1 "github.com/ZecretBone/ips-bff/internal/gen/proto/ips/user/v1"
 	"github.com/ZecretBone/ips-bff/internal/models/request"
 	usermanagerclient "github.com/ZecretBone/ips-bff/internal/repository/grpc/userManagerClient"
@@ -52,19 +53,15 @@ func (rs *userManagerHandler) GetSingleCoordinate(ctx *gin.Context) {
 		return
 	}
 
-	role := ToUserV1RoleEnum[oidcmiddleware.MatchRole(userInfo.Groups)]
-	is_admin := false
-	if role == 1 {
-		is_admin = true
-	}
+	is_admin := ToUserV1RoleEnum[oidcmiddleware.MatchRole(userInfo.Groups)] == shareduserv1.Role_ROLE_ADMIN
 
 	var body request.GetSingleCoordinateRequest
 	if err := ctx.BindJSON(&body); err != nil {
-		//err
-		ctx.JSON(http.StatusBadRequest, err)
+		ctx.JSON(http.StatusBadRequest, err.Error())
+		return
 	}
 
-	data := mapper.ToGetCoordinateRequest(body, userInfo.Name, is_admin)
+	data := mapper.ToGetCoordinateRequest(body, userInfo.PreferredUsername, is_admin)
 
 	predictedCoordinate, err := rs.userManagerClient.GetCoordinate(ctx, data)
 
