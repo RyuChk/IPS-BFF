@@ -21,6 +21,7 @@ var upgrader = websocket.Upgrader{
 
 type UserManagerHandler interface {
 	GetCoordinate(ctx *gin.Context)
+	GetSingleCoordinate(ctx *gin.Context)
 }
 
 type userManagerHandler struct {
