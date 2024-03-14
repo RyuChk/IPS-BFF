@@ -62,11 +62,13 @@ func ToBuildingDetailModel(body *mapv1.GetBuildingInfoResponse) models.Building 
 
 	for i, v := range body.Floors {
 		result.FloorList[i] = models.Floor{
-			Name:     v.Name,
-			Building: v.Building,
-			Floor:    int(v.Floor),
-			Symbol:   v.Symbol,
-			IsAdmin:  v.IsAdmin,
+			Name:       v.Name,
+			Building:   v.Building,
+			Floor:      int(v.Floor),
+			Symbol:     v.Symbol,
+			IsAdmin:    v.IsAdmin,
+			OriginLat:  v.OriginLat,
+			OriginLong: v.OriginLong,
 		}
 	}
 

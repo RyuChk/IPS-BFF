@@ -9,12 +9,14 @@ type Building struct {
 }
 
 type Floor struct {
-	Name        string `json:"name"`        //Map Name
-	Description string `json:"description"` //Floor Description
-	Floor       int    `json:"floor"`       //Floor number
-	Symbol      string `json:"symbol"`
-	Building    string `json:"building"` //Name of the building
-	IsAdmin     bool   `json:"is_admin"` //Only admin can view
+	Name        string  `json:"name"`        //Map Name
+	Description string  `json:"description"` //Floor Description
+	Floor       int     `json:"floor"`       //Floor number
+	Symbol      string  `json:"symbol"`
+	Building    string  `json:"building"` //Name of the building
+	IsAdmin     bool    `json:"is_admin"` //Only admin can view
+	OriginLat   float64 `json:"origin_lat"`
+	OriginLong  float64 `json:"origin_long"`
 }
 
 type FloorDetail struct {
