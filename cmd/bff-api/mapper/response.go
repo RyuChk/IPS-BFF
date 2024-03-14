@@ -78,11 +78,13 @@ func ToBuildingDetailModel(body *mapv1.GetBuildingInfoResponse) models.Building 
 func ToFloorDetailModel(body *mapv1.GetFloorInfoResponse) models.FloorDetail {
 	result := models.FloorDetail{
 		Info: models.Floor{
-			Name:     body.Info.Name,
-			Building: body.Info.Building,
-			Floor:    int(body.Info.Floor),
-			Symbol:   body.Info.Symbol,
-			IsAdmin:  body.Info.IsAdmin,
+			Name:       body.Info.Name,
+			Building:   body.Info.Building,
+			Floor:      int(body.Info.Floor),
+			Symbol:     body.Info.Symbol,
+			IsAdmin:    body.Info.IsAdmin,
+			OriginLat:  body.Info.OriginLat,
+			OriginLong: body.Info.OriginLong,
 		},
 		RoomList: make([]models.Room, len(body.Rooms)),
 	}
