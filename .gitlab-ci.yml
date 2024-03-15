@@ -125,7 +125,6 @@ release:
   retry: 2
   extends:
     - .deploy-argo
-  image: ubuntu:22.04
   variables:
     NAMESPACE: development
     AUTHOR: $CI_COMMIT_AUTHOR
