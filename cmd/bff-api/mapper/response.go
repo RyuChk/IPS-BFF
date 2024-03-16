@@ -30,6 +30,9 @@ func MapFetchResponseToOnlineUserStruct(resp *mapv1.FetchOnlineUserResponse) []m
 				Z: float64(v.Coordinate.Z),
 			},
 			Timestamp: v.Timestamp.AsTime(),
+			Building:  v.Building,
+			Floor:     v.Floor,
+			Label:     v.Label,
 		}
 	}
 
@@ -85,6 +88,7 @@ func ToFloorDetailModel(body *mapv1.GetFloorInfoResponse) models.FloorDetail {
 			IsAdmin:    body.Info.IsAdmin,
 			OriginLat:  body.Info.OriginLat,
 			OriginLong: body.Info.OriginLong,
+			MapUrl:     body.Info.MapUrl,
 		},
 		RoomList: make([]models.Room, len(body.Rooms)),
 	}

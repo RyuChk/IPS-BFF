@@ -17,6 +17,7 @@ type Floor struct {
 	IsAdmin     bool    `json:"is_admin"` //Only admin can view
 	OriginLat   float64 `json:"origin_lat"`
 	OriginLong  float64 `json:"origin_long"`
+	MapUrl      string  `json:"map_url"`
 }
 
 type FloorDetail struct {
