@@ -72,6 +72,7 @@ func ToBuildingDetailModel(body *mapv1.GetBuildingInfoResponse) models.Building 
 			IsAdmin:    v.IsAdmin,
 			OriginLat:  v.OriginLat,
 			OriginLong: v.OriginLong,
+			MapUrl:     v.MapUrl,
 		}
 	}
 
